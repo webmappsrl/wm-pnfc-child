@@ -9,3 +9,57 @@ Version: 0.0.1
 */
 
 /*Add your own styles here:*/
+
+/*Header*/
+.pnfc-social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-header-top-text);
+}
+.pnfc-social-icon {
+  width: 30px;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+/*Footer*/
+#page-footer
+  > section
+  > div
+  > div
+  > div
+  > div
+  > div
+  > div
+  > div
+  > p
+  > span
+  > a {
+  color: white;
+  text-decoration: underline;
+}
+
+div.pnfc-footer-socials > div > a > i {
+  color: white;
+}
+
+#page-footer
+  > section
+  > div
+  > div
+  > div
+  > div
+  > div
+  > div
+  > div
+  > p
+  > span
+  > a:hover,
+div.pnfc-footer-socials > div > a > i:hover {
+  color: var(--color-header-middle-text-hover);
+}
