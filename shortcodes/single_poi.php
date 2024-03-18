@@ -1,9 +1,9 @@
 <?php
 if (!is_admin()) {
-    add_shortcode('wm_single_track', 'wm_single_track_pnfc');
+    add_shortcode('wm_single_poi', 'wm_single_poi_pnfc');
 }
 
-function wm_single_track_pnfc($atts)
+function wm_single_poi_pnfc($atts)
 {
 
     if (defined('ICL_LANGUAGE_CODE')) {
@@ -13,15 +13,15 @@ function wm_single_track_pnfc($atts)
     }
 
     extract(shortcode_atts(array(
-        'track_id' => '',
+        'poi_id' => '',
         'activity' => ''
     ), $atts));
 
-    $single_track_base_url = get_option('track_url');
-    $geojson_url = $single_track_base_url.$track_id;
+    $single_poi_base_url = get_option('poi_url');
+    $geojson_url = $single_poi_base_url.$poi_id;
 
-    $track = json_decode(file_get_contents($geojson_url), true);
-    $track = $track['properties'];
+    $poi = json_decode(file_get_contents($geojson_url), true);
+    $poi = $poi['properties'];
     // echo '<pre>';
     // print_r($track);
     // echo '</pre>';
