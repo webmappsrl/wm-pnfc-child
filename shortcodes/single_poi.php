@@ -2,10 +2,8 @@
 if (!is_admin()) {
     add_shortcode('wm_single_poi', 'wm_single_poi_pnfc');
 }
-
 function wm_single_poi_pnfc($atts)
 {
-
     if (defined('ICL_LANGUAGE_CODE')) {
         $language = ICL_LANGUAGE_CODE;
     } else {
@@ -82,8 +80,8 @@ function wm_single_poi_pnfc($atts)
 		</div>
 		<div class="wm_track_body_map">
 			<?php
-                    echo do_shortcode('[wm-embedmaps geojson_url="' . $geojson_url . '" height="500px" lang="' . $language . '" related_poi_click_behaviour="open" show_related_pois="true" fullscreen="true"  hide_taxonomy_filters="true"]');
-    ?>
+			echo do_shortcode('[wm-embedmaps geojson_url="' . $geojson_url . '" height="500px" lang="' . $language . '" related_poi_click_behaviour="open" show_related_pois="true" fullscreen="true"  hide_taxonomy_filters="true"]');
+    		?>
 		</div>
 	</div>
 	<?php if ($description) { ?>

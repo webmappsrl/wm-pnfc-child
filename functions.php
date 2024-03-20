@@ -5,6 +5,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 require('shortcodes/single_track.php');
 require('shortcodes/single_poi.php');
 require('shortcodes/grid_track.php');
+require('shortcodes/grid_poi.php');
 require('shortcodes/single_layer.php');
 
 // BEGIN ENQUEUE PARENT ACTION

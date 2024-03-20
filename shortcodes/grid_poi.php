@@ -1,10 +1,12 @@
 <?php
 
-add_shortcode('wm_grid_track', 'wm_grid_track');
+add_shortcode('wm_grid_poi', 'wm_grid_poi');
 
-function wm_grid_track($atts)
+function wm_grid_poi($atts)
 {
+
     if (!is_admin()) {
+
         if (defined('ICL_LANGUAGE_CODE')) {
             $language = ICL_LANGUAGE_CODE;
         } else {
@@ -12,7 +14,7 @@ function wm_grid_track($atts)
         }
 
         extract(shortcode_atts(array(
-            'activity' => 'a piedi',
+            'poi_type' => 'huts',
             'quantity' => -1,
             'ids' => ''
         ), $atts));
@@ -35,6 +37,7 @@ function wm_grid_track($atts)
             $quantity = count($posts);
         } else {
             $activity = strtolower($activity);
+
             $activities_url = "https://geohub.webmapp.it/api/app/elbrus/1/taxonomies/track_activity_$activity_mapped.json";
             $posts = json_decode(file_get_contents($activities_url), TRUE);
             if (is_array($posts)) {
@@ -48,8 +51,8 @@ function wm_grid_track($atts)
         }
 
         ob_start();
-?><div class="wm-grid-track-item-container">
-    <?php
+        ?><div class="wm-grid-track-item-container">
+            <?php
                 for ($i = 0; $i < $quantity; $i++) {
                     $post = $posts[$i];
                     $hideClass = '';
@@ -92,7 +95,9 @@ function wm_grid_track($atts)
                             $distance = '';
                         }
                     }
+
                 ?>
+
                 <div class="wm-grid-track-item">
                     <a href="<?= $post_url ?>" class="wm-grid-track-link">
                         <div class="wm-grid-track-intro" style="background-image:url(<?= $image_url ?>);">

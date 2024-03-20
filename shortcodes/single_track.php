@@ -5,13 +5,11 @@ if (!is_admin()) {
 
 function wm_single_track_pnfc($atts)
 {
-
     if (defined('ICL_LANGUAGE_CODE')) {
         $language = ICL_LANGUAGE_CODE;
     } else {
         $language = 'it';
     }
-
     extract(shortcode_atts(array(
         'track_id' => '',
         'activity' => ''
