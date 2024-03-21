@@ -63,3 +63,162 @@ div.pnfc-footer-socials > div > a > i {
 div.pnfc-footer-socials > div > a > i:hover {
   color: var(--color-header-middle-text-hover);
 }
+
+/* Single track style */
+.wm_track_body_map_title {
+  padding-bottom: 20px;
+}
+.wm_track_body_map_title h2 {
+  color: var(--color-header-top-text);
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 38px;
+}
+.wm_track_body_download {
+  padding: 10px 10px;
+  text-align: start;
+  text-decoration: underline;
+}
+.wm_embedmaps-technical_info-table-element {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--color-header-middle-text);
+}
+.wm_embedmaps-technical_info-table-element-label {
+  order: -1;
+}
+.track_sidebar_label {
+  color: var(--color-header-top-text);
+  padding: 5px 15px 0px 15px;
+}
+.wm-elevation-chart {
+  background-color: #f9f7f2;
+  margin: 15px;
+}
+.wm_track_header_section .l-section-img.loaded {
+  background-size: cover;
+  background-position: center center;
+}
+.wm_track_header_wrapper h1,
+.wm_track_header_wrapper h3 {
+  color: white;
+}
+.wm_track_body_description {
+  color: var(--color-content-text);
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px;
+}
+/* .wm_track_body_excerpt h2 {
+  font-weight: unset !important;
+} */
+.swiper-container {
+  position: relative;
+}
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+.swiper-button-prev {
+  left: 10px;
+}
+.swiper-button-next {
+  right: 10px;
+}
+.swiper-pagination {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .wm_track_body_section {
+    display: grid;
+    padding: 30px 95px;
+    grid-template-columns: 70% 28%;
+    grid-template-areas:
+      'map sidebar'
+      'description sidebar'
+      'gallery sidebar';
+    grid-gap: 20px;
+  }
+  .wm_track_body_map_wrapper {
+    grid-area: map;
+  }
+  .wm_track_body_description {
+    grid-area: description;
+  }
+  .wm_track_body_gallery {
+    grid-area: gallery;
+  }
+  .wm_track_header_wrapper {
+    min-height: 360px;
+    display: grid;
+    align-content: end;
+    margin: 0;
+  }
+  .wm_track_body_gallery .w-grid-list:not(.autoheight) .owl-stage {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+  .wm_track_body_map_details,
+  .wm_track_body_map_elevation {
+    margin-bottom: 20px;
+  }
+  .track_sidebar_label {
+    font-size: 21px;
+    font-weight: 600;
+  }
+}
+@media (max-width: 767px) {
+  .wm_track_breadcrumb_section {
+    display: none;
+  }
+  .wm_track_header_section {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+  .wm_track_header_wrapper {
+    top: 250px;
+  }
+  .wm_track_header_taxonomy {
+    font-size: 20px !important;
+  }
+  .wm_track_header_title {
+    font-size: 30px !important;
+  }
+  .wm_track_header_section {
+    padding-bottom: 19.5rem !important;
+  }
+  .wm_track_header_section h1 {
+    font-size: 24px;
+  }
+  .wm_track_header_section h3 {
+    font-size: 16px;
+  }
+  .wm_track_body_section {
+    display: grid;
+    padding: 20px;
+    grid-gap: 20px;
+    width: 100%;
+    margin: auto;
+    grid-template-columns: 100%;
+  }
+  .wm_track_body_gallery .w-grid-list:not(.autoheight) .owl-stage {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .track_sidebar_label {
+    font-size: 21px;
+    font-weight: 600;
+  }
+}
