@@ -4,6 +4,7 @@ add_shortcode('wm_grid_track', 'wm_grid_track');
 
 function wm_grid_track($atts)
 {
+    // https://geohub.webmapp.it/api/app/webapp/49/taxonomies/poi_type/15 theme activity where
     if (!is_admin()) {
         if (defined('ICL_LANGUAGE_CODE')) {
             $language = ICL_LANGUAGE_CODE;
@@ -35,7 +36,7 @@ function wm_grid_track($atts)
             $quantity = count($posts);
         } else {
             $activity = strtolower($activity);
-            $activities_url = "https://geohub.webmapp.it/api/app/elbrus/1/taxonomies/track_activity_$activity_mapped.json";
+            $activities_url = "https://geohub.webmapp.it/api/app/webapp/49/taxonomies/poi_type/15";
             $posts = json_decode(file_get_contents($activities_url), TRUE);
             if (is_array($posts)) {
                 usort($posts, function ($a, $b) use ($language) {

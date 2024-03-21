@@ -15,6 +15,7 @@ function wm_single_track_pnfc($atts)
         'activity' => ''
     ), $atts));
 
+    // <iframe src="https://geohub.webmapp.it/w/simple/16294" frameborder="0"></iframe>
     $single_track_base_url = get_option('track_url');
     $geojson_url = $single_track_base_url.$track_id;
 
@@ -23,13 +24,17 @@ function wm_single_track_pnfc($atts)
     // echo '<pre>';
     // print_r($track);
     // echo '</pre>';
+    $excerpt = null;
     if (array_key_exists('excerpt', $track) && array_key_exists($language, $track['excerpt'])) {
         $excerpt = $track['excerpt'][$language];
-    } else {
-        $excerpt = null;
     }
     $description = $track['description'][$language];
     $title = $track['name'][$language];
+    $featured_image = get_stylesheet_directory_uri().'/assets/images/background.jpg';
+    // echo '<pre>';
+    // print_r($featured_image);
+    // echo '</pre>';
+    $featured_image = $track['feature_image']['url'];
     $featured_image = $track['feature_image']['sizes']['1440x500'];
     $gallery = array_key_exists('imageGallery', $track) ? $track['imageGallery'] : null;
     $gpx = $track['gpx_url'];
@@ -134,9 +139,8 @@ function wm_single_track_pnfc($atts)
 		<div class="wm_track_body_ticket">
 			<p class="ticket_text">
 				<?= $mapping['description'] ?>
-			</p><?php
-                                                                                    if (array_key_exists('calendar', $mapping)) {
-                                                                                        ?>
+			</p>
+			<?php if (array_key_exists('calendar', $mapping)) { ?>
 			<div class="single_track_ticket_btn">
 				<a class="w-btn us-btn-style_1"
 					href="<?= $mapping['calendar'] ?>"><span
@@ -146,7 +150,7 @@ function wm_single_track_pnfc($atts)
 				href="<?= $mapping['subscription'] ?>"><span
 					class="w-btn-label"><?= __('Subscription and promotions', 'wm-child-maremma') ?></span></a>
 			<?php
-                                                                                    }
+			}
                 ?>
 		</div><?php
             }
