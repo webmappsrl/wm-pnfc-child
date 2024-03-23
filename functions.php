@@ -30,3 +30,10 @@ function child_theme_enqueue_swiper()
     wp_enqueue_script('swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), null, true);
 }
 add_action('wp_enqueue_scripts', 'child_theme_enqueue_swiper');
+
+//Font awesome
+function load_font_awesome()
+{
+    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+}
+add_action('wp_enqueue_scripts', 'load_font_awesome');
