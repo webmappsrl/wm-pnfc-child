@@ -3,7 +3,6 @@ if (!is_admin()) {
 	add_shortcode('wm_single_track', 'wm_single_track_pnfc');
 }
 
-
 function wm_single_track_pnfc($atts)
 {
 	if (defined('ICL_LANGUAGE_CODE')) {
@@ -38,7 +37,7 @@ function wm_single_track_pnfc($atts)
 	$duration_forward = $track['duration_forward'];
 	$duration_hours = $duration_forward / 60;
 	$duration_text = is_int($duration_hours) ? strval($duration_hours) : number_format($duration_hours, 1);
-	$duration_text .= ' h'; // Aggiungi 'h' per ore
+	$duration_text .= ' h';
 	$difficulty = $track['difficulty'];
 	ob_start();
 ?>
@@ -136,7 +135,6 @@ function wm_single_track_pnfc($atts)
 		</div>
 	</div>
 
-
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			var swiper = new Swiper('.swiper-container', {
@@ -158,12 +156,9 @@ function wm_single_track_pnfc($atts)
 					nextEl: '.swiper-button-next',
 					prevEl: '.swiper-button-prev',
 				},
-
-
 			});
 		});
 	</script>
-
 <?php
 
 	return ob_get_clean();

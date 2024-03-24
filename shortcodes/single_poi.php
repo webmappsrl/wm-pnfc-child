@@ -145,8 +145,6 @@ function wm_single_poi_pnfc($atts)
 				</div>
 			<?php endif; ?>
 		</div>
-
-
 	</div>
 
 	<script>
@@ -170,8 +168,6 @@ function wm_single_poi_pnfc($atts)
 					nextEl: '.swiper-button-next',
 					prevEl: '.swiper-button-prev',
 				},
-
-
 			});
 		});
 	</script>
