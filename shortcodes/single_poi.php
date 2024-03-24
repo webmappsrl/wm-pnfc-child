@@ -70,19 +70,23 @@ function wm_single_poi_pnfc($atts)
 
 	<div class="wm_body_section">
 		<div class="wm_body_map_wrapper">
-			<h1 class="align_left wm_header_title">
-				<?= $title ?>
-			</h1>
+			<?php if ($title) { ?>
+				<h1 class="align_left wm_header_title">
+					<?= $title ?>
+				</h1>
+			<?php } ?>
 			<?php if ($excerpt) { ?>
 				<p class="wm_excerpt"><?php echo wp_kses_post($excerpt); ?></p>
 			<?php } ?>
 			<div class="wm_body_map">
 				<?php
-				echo do_shortcode("[leaflet-map lat=$latitude lng=$longitude zoom=16]");
-				// Usa lo shortcode del marker preparato in base alla presenza dell'icona
-				echo do_shortcode($markerShortcode . "{$title}[/leaflet-marker]");
+				if (!empty($latitude) && !empty($longitude)) {
+					echo do_shortcode("[leaflet-map lat=$latitude lng=$longitude zoom=16]");
+					echo do_shortcode($markerShortcode . "{$title}[/leaflet-marker]");
+				}
 				?>
 			</div>
+
 			<div class="wm_info">
 				<?php
 				$info_parts = [];
