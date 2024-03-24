@@ -104,10 +104,13 @@ div.pnfc-footer-socials > div > a > i:hover {
   font-style: normal;
   font-weight: 400;
   line-height: 26px;
-  padding-bottom: 25px;
 }
-.wm_address_info {
+.wm_info {
   color: var(--color-header-top-text);
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0px 10px 20px;
 }
 .swiper-container {
   position: relative;

@@ -34,12 +34,17 @@ function wm_single_poi_pnfc($atts)
 
 	$poi_properties = $poi['properties'];
 	$geometry = $poi['geometry'];
-
 	if (!empty($geometry) && $geometry['type'] == 'Point' && !empty($geometry['coordinates'])) {
 		$longitude = $geometry['coordinates'][0];
 		$latitude = $geometry['coordinates'][1];
 	} else {
 		return 'POI coordinates not found.';
+	}
+	$iconSVG = $poi_properties['taxonomy']['poi_type']['icon'] ?? '';
+	$markerShortcode = "[leaflet-marker lat=$latitude lng=$longitude]";
+	if (!empty($iconSVG)) {
+		$iconSVGBase64 = base64_encode($iconSVG);
+		$markerShortcode = "[leaflet-marker lat=$latitude lng=$longitude iconClass='dashicons dashicons-star-filled' iconUrl='data:image/svg+xml;base64,$iconSVGBase64' iconSize='40,40']";
 	}
 
 	$featured_image = $poi_properties['feature_image']['sizes']['1440x500'] ?? '';
@@ -50,6 +55,9 @@ function wm_single_poi_pnfc($atts)
 	$addr_street = $poi_properties['addr_street'] ?? '';
 	$addr_postcode = $poi_properties['addr_postcode'] ?? '';
 	$addr_locality = $poi_properties['addr_locality'] ?? '';
+	$contact_phone = $poi_properties['contact_phone'] ?? '';
+	$contact_email = $poi_properties['contact_email'] ?? '';
+	$related_urls = $poi_properties['related_url'] ?? [];
 
 	ob_start();
 ?>
@@ -70,27 +78,34 @@ function wm_single_poi_pnfc($atts)
 			<?php } ?>
 			<div class="wm_body_map">
 				<?php
-				echo do_shortcode("[leaflet-map lat=$latitude lng=$longitude zoom=16]");;
-				echo do_shortcode('[leaflet-marker lat=$latitude lng=$longitude]');
-				echo do_shortcode("[leaflet-marker lat=$latitude lng=$longitude]{$title}[/leaflet-marker]");
+				echo do_shortcode("[leaflet-map lat=$latitude lng=$longitude zoom=16]");
+				// Usa lo shortcode del marker preparato in base alla presenza dell'icona
+				echo do_shortcode($markerShortcode . "{$title}[/leaflet-marker]");
 				?>
 			</div>
-			<?php if (!empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality)) {
-				echo '<div class="wm_address_info">';
-				echo '<span class="fa fa-map-marker-alt"></span> ';
-				echo '<span>';
-				if (!empty($addr_street)) {
-					echo wp_kses_post($addr_street) . ', ';
+			<div class="wm_info">
+				<?php
+				$info_parts = [];
+				if (!empty($addr_street) || !empty($addr_postcode) || !empty($addr_locality)) {
+					$address = trim($addr_street . ', ' . $addr_postcode . ' ' . $addr_locality, ', ');
+					$info_parts[] = '<span class="wm_address_info"><span class="fa fa-map-marker-alt"></span> ' . esc_html($address) . '</span>';
 				}
-				if (!empty($addr_postcode)) {
-					echo wp_kses_post($addr_postcode) . ' ';
+				if (!empty($contact_phone)) {
+					$info_parts[] = '<span class="wm_contact_phone"><span class="fa fa-phone"></span> ' . esc_html($contact_phone) . '</span>';
 				}
-				if (!empty($addr_locality)) {
-					echo wp_kses_post($addr_locality);
+				if (!empty($contact_email)) {
+					$info_parts[] = '<span class="wm_contact_email"><span class="fa fa-envelope"></span> <a href="mailto:' . esc_attr($contact_email) . '">' . esc_html($contact_email) . '</a></span>';
 				}
-				echo '</span>';
-				echo '</div>';
-			} ?>
+				if (!empty($related_urls)) {
+					$urls_output = [];
+					foreach ($related_urls as $url_name => $url) {
+						$urls_output[] = '<a href="' . esc_url($url) . '" target="_blank">' . esc_html($url_name) . '</a>';
+					}
+					$info_parts[] = '<span class="wm_related_urls"> <span class="fa fa-external-link-alt"></span> ' . implode(', ', $urls_output) . '</span>';
+				}
+				echo implode(' - ', $info_parts);
+				?>
+			</div>
 		</div>
 
 		<?php if ($description) { ?>
