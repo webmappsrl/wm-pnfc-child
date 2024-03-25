@@ -12,7 +12,7 @@ function wm_single_poi_pnfc($atts)
 	}
 
 	extract(shortcode_atts(array(
-		'poi_id' => '',
+		'poi_id' => null,
 	), $atts));
 
 	$single_poi_base_url = get_option('poi_url');
@@ -20,45 +20,44 @@ function wm_single_poi_pnfc($atts)
 
 	$response = wp_remote_get($geojson_url);
 	if (is_wp_error($response)) {
-		return 'Errore nel recuperare i dati del POI.';
+		return 'Failed to load POI data.';
 	}
 
 	$poi_data = wp_remote_retrieve_body($response);
 	$poi = json_decode($poi_data, true);
-	// echo '<pre>';
-	// print_r($poi);
-	// echo '</pre>';
 	if (!$poi || !isset($poi['properties'])) {
 		return 'Failed to load POI data.';
 	}
 
 	$poi_properties = $poi['properties'];
-	$geometry = $poi['geometry'];
-	if (!empty($geometry) && $geometry['type'] == 'Point' && !empty($geometry['coordinates'])) {
-		$longitude = $geometry['coordinates'][0];
-		$latitude = $geometry['coordinates'][1];
+	$geometry = $poi['geometry'] ?? null;
+
+	$latitude = $longitude = '';
+	if (!empty($geometry) && $geometry['type'] === 'Point' && !empty($geometry['coordinates'])) {
+		[$longitude, $latitude] = $geometry['coordinates'];
 	} else {
 		return 'POI coordinates not found.';
 	}
+
+	$title = $poi_properties['name'][$language] ?? '';
+	$description = $poi_properties['description'][$language] ?? '';
+	$excerpt = $poi_properties['excerpt'][$language] ?? '';
+	$featured_image_url = $poi_properties['feature_image']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
+	$featured_image = $poi_properties['feature_image']['sizes']['1440x500'] ?? $featured_image_url;
+	$contact_phone = $poi_properties['contact_phone'] ?? '';
+	$contact_email = $poi_properties['contact_email'] ?? '';
+	$addr_street = $poi_properties['addr_street'] ?? '';
+	$addr_postcode = $poi_properties['addr_postcode'] ?? '';
+	$addr_locality = $poi_properties['addr_locality'] ?? '';
+	$gallery = $poi_properties['image_gallery'] ?? [];
+	$related_urls = $poi_properties['related_url'] ?? [];
+
 	$iconSVG = $poi_properties['taxonomy']['poi_type']['icon'] ?? '';
 	$markerShortcode = "[leaflet-marker lat=$latitude lng=$longitude]";
 	if (!empty($iconSVG)) {
 		$iconSVGBase64 = base64_encode($iconSVG);
 		$markerShortcode = "[leaflet-marker lat=$latitude lng=$longitude iconClass='dashicons dashicons-star-filled' iconUrl='data:image/svg+xml;base64,$iconSVGBase64' iconSize='40,40']";
 	}
-
-	$featured_image = $poi_properties['feature_image']['sizes']['1440x500'] ?? '';
-	$title = $poi_properties['name'][$language] ?? '';
-	$description = $poi_properties['description'][$language] ?? '';
-	$excerpt = $poi_properties['excerpt'][$language] ?? '';
-	$gallery = $poi_properties['image_gallery'] ?? [];
-	$addr_street = $poi_properties['addr_street'] ?? '';
-	$addr_postcode = $poi_properties['addr_postcode'] ?? '';
-	$addr_locality = $poi_properties['addr_locality'] ?? '';
-	$contact_phone = $poi_properties['contact_phone'] ?? '';
-	$contact_email = $poi_properties['contact_email'] ?? '';
-	$related_urls = $poi_properties['related_url'] ?? [];
-
 	ob_start();
 ?>
 	<section class="l-section wpb_row height_small with_img with_overlay wm_header_section">
@@ -81,7 +80,7 @@ function wm_single_poi_pnfc($atts)
 			<div class="wm_body_map">
 				<?php
 				if (!empty($latitude) && !empty($longitude)) {
-					echo do_shortcode("[leaflet-map lat=$latitude lng=$longitude zoom=16]");
+					echo do_shortcode("[leaflet-map lat=$latitude lng=$longitude min_zoom='1' max_zoom='16']");
 					echo do_shortcode($markerShortcode . "{$title}[/leaflet-marker]");
 				}
 				?>
@@ -126,7 +125,7 @@ function wm_single_poi_pnfc($atts)
 							<div class="swiper-slide">
 								<?php
 								$size_order = ['400x200', '1440x500', '335x250', '250x150'];
-								$img_url = '';
+								$img_url = null;
 								foreach ($size_order as $size) {
 									if (isset($image['sizes'][$size])) {
 										$img_url = esc_url($image['sizes'][$size]);

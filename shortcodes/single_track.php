@@ -22,23 +22,33 @@ function wm_single_track_pnfc($atts)
 	// echo '<pre>';
 	// print_r($track);
 	// echo '</pre>';
-	$description = $track['description'][$language];
-	$excerpt = $track['excerpt'][$language];
 
-	$title = $track['name'][$language];
-	$featured_image = get_stylesheet_directory_uri() . '/assets/images/background.jpg';
-	$featured_image = $track['feature_image']['url'];
-	$featured_image = $track['feature_image']['sizes']['1440x500'];
-	$gallery = array_key_exists('image_gallery', $track) ? $track['image_gallery'] : null;
-	$gpx = $track['gpx_url'];
-	$distance = $track['distance'];
-	$ele_min = $track['ele_min'];
-	$ele_max = $track['ele_max'];
-	$duration_forward = $track['duration_forward'];
-	$duration_hours = $duration_forward / 60;
-	$duration_text = is_int($duration_hours) ? strval($duration_hours) : number_format($duration_hours, 1);
-	$duration_text .= ' h';
-	$difficulty = $track['difficulty'];
+	$description = null;
+	$excerpt = null;
+	$title = null;
+	$featured_image = null;
+	$gallery = [];
+	$gpx = null;
+	$distance = null;
+	$ele_min = null;
+	$ele_max = null;
+	$duration_forward = null;
+	$difficulty = null;
+
+	if ($track) {
+		$description = $track['description'][$language] ?? null;
+		$excerpt = $track['excerpt'][$language] ?? null;
+		$title = $track['name'][$language] ?? null;
+		$featured_image_url = $track['feature_image']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
+		$featured_image = $track['feature_image']['sizes']['1440x500'] ?? $featured_image_url;
+		$gallery = $track['image_gallery'] ?? [];
+		$gpx = $track['gpx_url'] ?? null;
+		$distance = $track['distance'] ?? null;
+		$ele_min = $track['ele_min'] ?? null;
+		$ele_max = $track['ele_max'] ?? null;
+		$duration_forward = $track['duration_forward'] ?? null;
+		$difficulty = $track['difficulty'] ?? null;
+	}
 	ob_start();
 ?>
 
@@ -83,7 +93,7 @@ function wm_single_track_pnfc($atts)
 				</div>
 				<?php
 				if (!empty($gpx)) {
-					echo do_shortcode("[leaflet-map]");
+					echo do_shortcode("[leaflet-map min_zoom='1' max_zoom='16']");
 					echo do_shortcode("[leaflet-gpx src='{$gpx}']");
 				}
 				?>
