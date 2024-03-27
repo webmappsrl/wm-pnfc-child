@@ -86,7 +86,7 @@ function wm_single_track_pnfc($atts)
 						$info_parts[] = '<span class="wm_ele_max_info"><span class="fa fa-arrow-alt-circle-up"></span> ' . esc_html($ele_max) . ' m</span>';
 					}
 					if (!empty($duration_forward)) {
-						$info_parts[] = '<span class="wm_duration"><span class="fa fa-clock"></span> ' . esc_html($duration_text) . '</span>';
+						$info_parts[] = '<span class="wm_duration"><span class="fa fa-clock"></span> ' . esc_html($duration_forward) . '</span>';
 					}
 					echo implode(' - ', $info_parts);
 					?>
