@@ -250,7 +250,8 @@ div.pnfc-footer-socials > div > a > i:hover {
   position: relative;
   margin-bottom: 10px;
 }
-.wm_grid_track_info {
+.wm_grid_track_info,
+.wm_grid_poi_info {
   position: absolute;
   top: 10px;
   left: 10px;

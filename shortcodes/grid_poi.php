@@ -17,24 +17,19 @@ function wm_grid_poi($atts)
             'random' => 'false'
         ), $atts));
 
-        $poi_data = []; // Qui raccoglierai i dati dei POI
+        $poi_data = [];
 
         if ($poi_type_id) {
             $poi_url = "https://geohub.webmapp.it/api/app/webapp/49/taxonomies/poi_type/$poi_type_id";
             $response = wp_remote_get($poi_url);
-
             if (!is_wp_error($response)) {
                 $data = json_decode(wp_remote_retrieve_body($response), true);
                 $poi_data = $data ?? [];
             }
         }
-
-        // Se 'random' è vero, mescola i dati dei POI
         if ('true' === $random) {
             shuffle($poi_data);
         }
-
-        // Se è impostato 'quantity', limita il numero di POI
         if ($quantity > 0 && count($poi_data) > $quantity) {
             $poi_data = array_slice($poi_data, 0, $quantity);
         }
@@ -49,14 +44,13 @@ function wm_grid_poi($atts)
                     $name_url = wm_custom_slugify($name);
                     $language_prefix = $language === 'en' ? '/en' : '';
                     $poi_page_url = "{$language_prefix}/poi/{$name_url}/";
+                    $icon = '<span class="fas fa-map-marker-alt"></span>';
                     ?>
                     <a href="<?= esc_url($poi_page_url); ?>">
                         <div class="wm_grid_poi_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
-                            <!-- L'immagine del POI -->
                         </div>
                         <?php if ($name) : ?>
-                            <div class="wm_grid_poi_name"><?= esc_html($name); ?></div>
-                            <!-- Il nome del POI -->
+                            <div class="wm_grid_poi_name"><?= $icon; ?> <?= esc_html($name); ?></div>
                         <?php endif; ?>
                     </a>
                 </div>
