@@ -72,9 +72,14 @@ function wm_single_track_pnfc($atts)
 			<div class="wm_body_map">
 				<div class="wm_info_poi">
 					<?php
+					if ($language == 'en') {
+						$difficulty_label = 'Difficulty:';
+					} else {
+						$difficulty_label = 'Difficoltà:';
+					}
 					$info_parts = [];
 					if (!empty($difficulty)) {
-						$info_parts[] = '<span class="wm_difficulty_info"><span class="fa fa-shoe-prints"></span> ' . esc_html($difficulty) . '</span>';
+						$info_parts[] = '<span class="wm_difficulty_info">' . esc_html($difficulty_label) . ' ' . esc_html($difficulty) . '</span>';
 					}
 					if (!empty($distance)) {
 						$info_parts[] = '<span class="wm_distance_info"><span class="fa fa-route"></span> ' . esc_html($distance) . ' km</span>';
@@ -108,13 +113,11 @@ function wm_single_track_pnfc($atts)
 			</div>
 		</div>
 
-
 		<?php if ($description) { ?>
 			<div class="wm_body_description">
 				<?php echo $description; ?>
 			</div>
 		<?php } ?>
-
 
 		<div class="wm_body_gallery">
 			<?php if (is_array($gallery) && !empty($gallery)) : ?>

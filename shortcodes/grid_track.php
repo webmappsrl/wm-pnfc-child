@@ -12,19 +12,36 @@ function wm_grid_track($atts)
     }
     extract(shortcode_atts(array(
         'layer_id' => '',
+        'layer_ids' => '',
         'quantity' => -1,
         'random' => 'false'
     ), $atts));
 
-    $layer_url = "https://geohub.webmapp.it/api/app/webapp/49/layer/{$layer_id}";
-    $response = wp_remote_get($layer_url);
+    $tracks = [];
+    if (!empty($layer_ids) && $quantity > 0) {
+        $layer_ids_array = explode(',', $layer_ids);
+        foreach ($layer_ids_array as $single_layer_id) {
+            $layer_url = "https://geohub.webmapp.it/api/app/webapp/49/layer/{$single_layer_id}";
+            $response = wp_remote_get($layer_url);
 
-    if (is_wp_error($response)) {
-        return;
+            if (is_wp_error($response)) continue;
+
+            $layer_data = json_decode(wp_remote_retrieve_body($response), true);
+            $layer_tracks = $layer_data['tracks'] ?? [];
+
+            $tracks = array_merge($tracks, $layer_tracks);
+        }
+    } else {
+        if (!empty($layer_id)) {
+            $layer_url = "https://geohub.webmapp.it/api/app/webapp/49/layer/{$layer_id}";
+            $response = wp_remote_get($layer_url);
+
+            if (!is_wp_error($response)) {
+                $layer_data = json_decode(wp_remote_retrieve_body($response), true);
+                $tracks = $layer_data['tracks'] ?? [];
+            }
+        }
     }
-
-    $layer_data = json_decode(wp_remote_retrieve_body($response), true);
-    $tracks = $layer_data['tracks'] ?? [];
 
     if ('true' === $random) {
         shuffle($tracks);

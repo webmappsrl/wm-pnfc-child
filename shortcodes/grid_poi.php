@@ -13,20 +13,31 @@ function wm_grid_poi($atts)
 
         extract(shortcode_atts(array(
             'poi_type_id' => '',
+            'poi_type_ids' => '',
             'quantity' => -1,
             'random' => 'false'
         ), $atts));
 
         $poi_data = [];
 
-        if ($poi_type_id) {
+        if (!empty($poi_type_ids)) {
+            $poi_type_ids_array = explode(',', $poi_type_ids);
+            foreach ($poi_type_ids_array as $id) {
+                $poi_url = "https://geohub.webmapp.it/api/app/webapp/49/taxonomies/poi_type/$id";
+                $response = wp_remote_get($poi_url);
+                if (!is_wp_error($response)) {
+                    $data = json_decode(wp_remote_retrieve_body($response), true) ?? [];
+                    $poi_data = array_merge($poi_data, $data);
+                }
+            }
+        } elseif (!empty($poi_type_id)) {
             $poi_url = "https://geohub.webmapp.it/api/app/webapp/49/taxonomies/poi_type/$poi_type_id";
             $response = wp_remote_get($poi_url);
             if (!is_wp_error($response)) {
-                $data = json_decode(wp_remote_retrieve_body($response), true);
-                $poi_data = $data ?? [];
+                $poi_data = json_decode(wp_remote_retrieve_body($response), true) ?? [];
             }
         }
+
         if ('true' === $random) {
             shuffle($poi_data);
         }

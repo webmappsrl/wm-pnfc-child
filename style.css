@@ -11,6 +11,10 @@ Version: 0.0.1
 /*Add your own styles here:*/
 
 /*Global*/
+
+h5 {
+  color: var(--color-header-top-text) !important;
+}
 p {
   text-align: justify;
 }
@@ -68,7 +72,29 @@ div.pnfc-footer-socials > div > a > i:hover {
   color: var(--color-header-middle-text-hover);
 }
 
-/* Single track & poi style */
+/*Home*/
+#menu-menu-cosa-fare li a:hover,
+#menu-menu-cosa-vedere li a:hover,
+#menu-menu-ospitalita li a:hover {
+  color: var(--color-header-middle-text-hover);
+}
+div.wm_home_text > div > p > a {
+  color: white;
+}
+div.wm_home_text > div > p > a:hover {
+  color: var(--color-header-middle-text-hover);
+}
+
+/* Single track & poi */
+.wm_layer_wrapper {
+  padding: 2% 7%;
+}
+.wm_header_title {
+  padding-left: 4%;
+}
+.wm_description {
+  margin-bottom: 0px;
+}
 .wm_header_section {
   height: 450px;
 }
@@ -171,7 +197,7 @@ div.pnfc-footer-socials > div > a > i:hover {
 @media (min-width: 768px) {
   .wm_body_section {
     display: grid;
-    padding: 30px 95px;
+    padding: 6px 80px;
     grid-template-columns: 100%;
     grid-template-areas:
       'map'
