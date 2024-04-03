@@ -10,6 +10,7 @@ function wm_grid_track($atts)
     } else {
         $language = 'it';
     }
+
     extract(shortcode_atts(array(
         'layer_id' => '',
         'layer_ids' => '',
@@ -18,27 +19,23 @@ function wm_grid_track($atts)
     ), $atts));
 
     $tracks = [];
-    if (!empty($layer_ids) && $quantity > 0) {
-        $layer_ids_array = explode(',', $layer_ids);
-        foreach ($layer_ids_array as $single_layer_id) {
-            $layer_url = "https://geohub.webmapp.it/api/app/webapp/49/layer/{$single_layer_id}";
-            $response = wp_remote_get($layer_url);
+    $layer_ids_array = !empty($layer_ids) ? explode(',', $layer_ids) : (!empty($layer_id) ? [$layer_id] : []);
 
-            if (is_wp_error($response)) continue;
+    foreach ($layer_ids_array as $id) {
+        if (empty($id)) continue;
 
-            $layer_data = json_decode(wp_remote_retrieve_body($response), true);
-            $layer_tracks = $layer_data['tracks'] ?? [];
+        $layer_url = "https://geohub.webmapp.it/api/app/webapp/49/layer/{$id}";
+        $response = wp_remote_get($layer_url);
 
-            $tracks = array_merge($tracks, $layer_tracks);
-        }
-    } else {
-        if (!empty($layer_id)) {
-            $layer_url = "https://geohub.webmapp.it/api/app/webapp/49/layer/{$layer_id}";
-            $response = wp_remote_get($layer_url);
+        if (is_wp_error($response)) continue;
 
-            if (!is_wp_error($response)) {
-                $layer_data = json_decode(wp_remote_retrieve_body($response), true);
-                $tracks = $layer_data['tracks'] ?? [];
+        $layer_data = json_decode(wp_remote_retrieve_body($response), true);
+        if (!empty($layer_data['tracks'])) {
+            foreach ($layer_data['tracks'] as $track) {
+                if (!empty($layer_data['taxonomy_themes'][0]['icon'])) {
+                    $track['svg_icon'] = $layer_data['taxonomy_themes'][0]['icon'];
+                }
+                $tracks[] = $track;
             }
         }
     }
@@ -61,9 +58,17 @@ function wm_grid_track($atts)
                 $name_url = wm_custom_slugify($name);
                 $language_prefix = $language === 'en' ? '/en' : '';
                 $track_page_url = "{$language_prefix}/track/{$name_url}/";
+                $svg_icon = $track['svg_icon'] ?? '';
                 ?>
                 <a href="<?= esc_url($track_page_url); ?>">
-                    <div class="wm_grid_track_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');"></div>
+                    <?php if ($feature_image_url) : ?>
+                        <div class="wm_grid_track_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
+                            <?php if ($svg_icon) : ?>
+                                <div class="wm_grid_icon"> <?= $svg_icon; ?></div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
                     <?php if ($name) : ?>
                         <div class="wm_grid_track_name"><?= esc_html($name); ?></div>
                     <?php endif; ?>
@@ -74,4 +79,3 @@ function wm_grid_track($atts)
 <?php
     return ob_get_clean();
 }
-?>

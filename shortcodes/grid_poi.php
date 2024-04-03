@@ -11,41 +11,42 @@ function wm_grid_poi($atts)
             $language = 'it';
         }
 
-        extract(shortcode_atts(array(
+        extract(shortcode_atts([
             'poi_type_id' => '',
             'poi_type_ids' => '',
             'quantity' => -1,
             'random' => 'false'
-        ), $atts));
+        ], $atts));
 
         $poi_data = [];
+        $poi_type_ids_array = !empty($poi_type_ids) ? explode(',', $poi_type_ids) : (!empty($poi_type_id) ? [$poi_type_id] : []);
 
-        if (!empty($poi_type_ids)) {
-            $poi_type_ids_array = explode(',', $poi_type_ids);
-            foreach ($poi_type_ids_array as $id) {
-                $poi_url = "https://geohub.webmapp.it/api/app/webapp/49/taxonomies/poi_type/$id";
-                $response = wp_remote_get($poi_url);
-                if (!is_wp_error($response)) {
-                    $data = json_decode(wp_remote_retrieve_body($response), true) ?? [];
-                    $poi_data = array_merge($poi_data, $data);
+        foreach ($poi_type_ids_array as $id) {
+            $poi_url = "https://geohub.webmapp.it/api/app/webapp/49/taxonomies/poi_type/$id";
+            $response = wp_remote_get($poi_url);
+
+            if (!is_wp_error($response)) {
+                $data = json_decode(wp_remote_retrieve_body($response), true);
+                if (!empty($data) && isset($data['features'])) {
+                    foreach ($data['features'] as $feature) {
+                        if (isset($data['icon'])) {
+                            $feature['svg_icon'] = $data['icon'];
+                        }
+                        $poi_data[] = $feature;
+                    }
                 }
             }
-        } elseif (!empty($poi_type_id)) {
-            $poi_url = "https://geohub.webmapp.it/api/app/webapp/49/taxonomies/poi_type/$poi_type_id";
-            $response = wp_remote_get($poi_url);
-            if (!is_wp_error($response)) {
-                $poi_data = json_decode(wp_remote_retrieve_body($response), true) ?? [];
-            }
         }
-
         if ('true' === $random) {
             shuffle($poi_data);
         }
         if ($quantity > 0 && count($poi_data) > $quantity) {
             $poi_data = array_slice($poi_data, 0, $quantity);
         }
+
         ob_start();
 ?>
+
         <div class="wm_poi_grid">
             <?php foreach ($poi_data as $poi) : ?>
                 <div class="wm_grid_poi_item">
@@ -55,20 +56,28 @@ function wm_grid_poi($atts)
                     $name_url = wm_custom_slugify($name);
                     $language_prefix = $language === 'en' ? '/en' : '';
                     $poi_page_url = "{$language_prefix}/poi/{$name_url}/";
-                    $icon = '<span class="fas fa-map-marker-alt"></span>';
+                    $svg_icon = $poi['svg_icon'] ?? '';
                     ?>
                     <a href="<?= esc_url($poi_page_url); ?>">
-                        <div class="wm_grid_poi_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
-                        </div>
-                        <?php if ($name) : ?>
-                            <div class="wm_grid_poi_name"><?= $icon; ?> <?= esc_html($name); ?></div>
+                        <?php if ($feature_image_url) : ?>
+                            <div class="wm_grid_poi_image" style="background-image: url('<?= esc_url($feature_image_url); ?>');">
+                                <?php if ($svg_icon) : ?>
+                                    <div class="wm_grid_icon"><?= $svg_icon; ?></div>
+                                <?php endif; ?>
+                            </div>
                         <?php endif; ?>
+
+                        <?php if ($name) : ?>
+                            <div class="wm_grid_poi_name"><?= esc_html($name); ?></div>
+                        <?php endif; ?>
+
                     </a>
                 </div>
             <?php endforeach; ?>
         </div>
+
 <?php
-        echo ob_get_clean();
+        return ob_get_clean();
     } else {
         return;
     }

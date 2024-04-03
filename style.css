@@ -90,7 +90,9 @@ div.wm_home_text > div > p > a:hover {
   padding: 2% 7%;
 }
 .wm_header_title {
-  padding-left: 4%;
+  padding-top: 20px !important;
+  padding-left: 2%;
+  padding-bottom: 25px;
 }
 .wm_description {
   margin-bottom: 0px;
@@ -145,6 +147,9 @@ div.wm_home_text > div > p > a:hover {
   color: var(--color-header-top-text);
   font-weight: bold;
   padding: 0px 0px 10px 10px;
+}
+.wm_body_gallery {
+  padding-bottom: 30px;
 }
 .swiper-container {
   position: relative;
@@ -275,6 +280,9 @@ div.wm_home_text > div > p > a:hover {
   height: 200px;
   position: relative;
   margin-bottom: 10px;
+}
+.wm_grid_icon {
+  padding: 5px;
 }
 .wm_grid_track_info,
 .wm_grid_poi_info {
