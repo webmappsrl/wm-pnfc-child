@@ -22,18 +22,13 @@ function wm_single_track_pnfc($atts)
 	// echo '<pre>';
 	// print_r($track);
 	// echo '</pre>';
+	$iframeUrl = "https://geohub.webmapp.it/w/simple/" . $track_id;
 
 	$description = null;
 	$excerpt = null;
 	$title = null;
 	$featured_image = null;
 	$gallery = [];
-	$gpx = null;
-	$distance = null;
-	$ele_min = null;
-	$ele_max = null;
-	$duration_forward = null;
-	$difficulty = null;
 
 	if ($track) {
 		$description = $track['description'][$language] ?? null;
@@ -42,12 +37,6 @@ function wm_single_track_pnfc($atts)
 		$featured_image_url = $track['feature_image']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
 		$featured_image = $track['feature_image']['sizes']['1440x500'] ?? $featured_image_url;
 		$gallery = $track['image_gallery'] ?? [];
-		$gpx = $track['gpx_url'] ?? null;
-		$distance = $track['distance'] ?? null;
-		$ele_min = $track['ele_min'] ?? null;
-		$ele_max = $track['ele_max'] ?? null;
-		$duration_forward = $track['duration_forward'] ?? null;
-		$difficulty = $track['difficulty'] ?? null;
 	}
 	ob_start();
 ?>
@@ -69,48 +58,8 @@ function wm_single_track_pnfc($atts)
 			<?php if ($excerpt) { ?>
 				<p class="wm_excerpt"><?php echo wp_kses_post($excerpt); ?></p>
 			<?php } ?>
-			<div class="wm_body_map">
-				<div class="wm_info_poi">
-					<?php
-					if ($language == 'en') {
-						$difficulty_label = 'Difficulty:';
-					} else {
-						$difficulty_label = 'Difficoltà:';
-					}
-					$info_parts = [];
-					if (!empty($difficulty)) {
-						$info_parts[] = '<span class="wm_difficulty_info">' . esc_html($difficulty_label) . ' ' . esc_html($difficulty) . '</span>';
-					}
-					if (!empty($distance)) {
-						$info_parts[] = '<span class="wm_distance_info"><span class="fa fa-route"></span> ' . esc_html($distance) . ' km</span>';
-					}
-					if (!empty($ele_min)) {
-						$info_parts[] = '<span class="wm_ele_min_info"><span class="fa fa-arrow-alt-circle-down"></span> ' . esc_html($ele_min) . ' m</span>';
-					}
-					if (!empty($ele_max)) {
-						$info_parts[] = '<span class="wm_ele_max_info"><span class="fa fa-arrow-alt-circle-up"></span> ' . esc_html($ele_max) . ' m</span>';
-					}
-					if (!empty($duration_forward)) {
-						$info_parts[] = '<span class="wm_duration"><span class="fa fa-clock"></span> ' . esc_html($duration_forward) . '</span>';
-					}
-					echo implode(' - ', $info_parts);
-					?>
-				</div>
-				<?php
-				if (!empty($gpx)) {
-					echo do_shortcode("[leaflet-map min_zoom='1' max_zoom='16']");
-					echo do_shortcode("[leaflet-gpx src='{$gpx}']");
-				}
-				?>
-				<div class="wm_body_download">
-					<?php if (!empty($gpx)) : ?>
-						<a class="icon_atleft" href="<?= esc_url($gpx); ?>" target="_blank" rel="noopener noreferrer">
-							<i class="fa fa-download"></i>
-							<?= __('Download GPX', 'wm-child') ?>
-						</a>
-					<?php endif; ?>
-				</div>
-			</div>
+			<iframe class="wm_iframe_map_track" src="<?= esc_url($iframeUrl); ?>" loading="lazy"></iframe>
+
 		</div>
 
 		<?php if ($description) { ?>

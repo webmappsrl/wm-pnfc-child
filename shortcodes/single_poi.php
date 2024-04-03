@@ -30,33 +30,33 @@ function wm_single_poi_pnfc($atts)
 	}
 
 	$poi_properties = $poi['properties'];
-	$geometry = $poi['geometry'] ?? null;
+	$iframeUrl = "https://geohub.webmapp.it/poi/simple/" . $poi_id;
 
-	$latitude = $longitude = '';
-	if (!empty($geometry) && $geometry['type'] === 'Point' && !empty($geometry['coordinates'])) {
-		[$longitude, $latitude] = $geometry['coordinates'];
-	} else {
-		return 'POI coordinates not found.';
-	}
+	$title = null;
+	$description = null;
+	$excerpt = null;
+	$featured_image = null;
+	$contact_phone = null;
+	$contact_email = null;
+	$addr_street = null;
+	$addr_postcode = null;
+	$addr_locality = null;
+	$gallery = null;
+	$related_urls = null;
 
-	$title = $poi_properties['name'][$language] ?? '';
-	$description = $poi_properties['description'][$language] ?? '';
-	$excerpt = $poi_properties['excerpt'][$language] ?? '';
-	$featured_image_url = $poi_properties['feature_image']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
-	$featured_image = $poi_properties['feature_image']['sizes']['1440x500'] ?? $featured_image_url;
-	$contact_phone = $poi_properties['contact_phone'] ?? '';
-	$contact_email = $poi_properties['contact_email'] ?? '';
-	$addr_street = $poi_properties['addr_street'] ?? '';
-	$addr_postcode = $poi_properties['addr_postcode'] ?? '';
-	$addr_locality = $poi_properties['addr_locality'] ?? '';
-	$gallery = $poi_properties['image_gallery'] ?? [];
-	$related_urls = $poi_properties['related_url'] ?? [];
-
-	$iconSVG = $poi_properties['taxonomy']['poi_type']['icon'] ?? '';
-	$markerShortcode = "[leaflet-marker lat=$latitude lng=$longitude]";
-	if (!empty($iconSVG)) {
-		$iconSVGBase64 = base64_encode($iconSVG);
-		$markerShortcode = "[leaflet-marker lat=$latitude lng=$longitude iconClass='dashicons dashicons-star-filled' iconUrl='data:image/svg+xml;base64,$iconSVGBase64' iconSize='40,40']";
+	if (!empty($poi_properties)) {
+		$title = $poi_properties['name'][$language] ?? '';
+		$description = $poi_properties['description'][$language] ?? '';
+		$excerpt = $poi_properties['excerpt'][$language] ?? '';
+		$featured_image_url = $poi_properties['feature_image']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
+		$featured_image = $poi_properties['feature_image']['sizes']['1440x500'] ?? $featured_image_url;
+		$contact_phone = $poi_properties['contact_phone'] ?? '';
+		$contact_email = $poi_properties['contact_email'] ?? '';
+		$addr_street = $poi_properties['addr_street'] ?? '';
+		$addr_postcode = $poi_properties['addr_postcode'] ?? '';
+		$addr_locality = $poi_properties['addr_locality'] ?? '';
+		$gallery = $poi_properties['image_gallery'] ?? [];
+		$related_urls = $poi_properties['related_url'] ?? [];
 	}
 	ob_start();
 ?>
@@ -77,15 +77,7 @@ function wm_single_poi_pnfc($atts)
 			<?php if ($excerpt) { ?>
 				<p class="wm_excerpt"><?php echo wp_kses_post($excerpt); ?></p>
 			<?php } ?>
-			<div class="wm_body_map">
-				<?php
-				if (!empty($latitude) && !empty($longitude)) {
-					echo do_shortcode("[leaflet-map lat=$latitude lng=$longitude min_zoom='1' max_zoom='16']");
-					echo do_shortcode($markerShortcode . "{$title}[/leaflet-marker]");
-				}
-				?>
-			</div>
-
+			<iframe class="wm_iframe_map_poi" src="<?= esc_url($iframeUrl); ?>" loading="lazy"></iframe>
 			<div class="wm_info">
 				<?php
 				$info_parts = [];
