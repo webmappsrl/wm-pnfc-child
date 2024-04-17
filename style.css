@@ -113,10 +113,12 @@ div.wm_home_text > div > p > a:hover {
 .wm_iframe_map_track {
   width: 100%;
   height: 600px;
+  border: 2px solid var(--color-header-top-text);
 }
 .wm_iframe_map_poi {
   width: 100%;
   height: 300px;
+  border: 2px solid var(--color-header-top-text);
 }
 .wm_body_download {
   display: flex;
