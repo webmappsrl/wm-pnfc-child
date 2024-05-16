@@ -68,12 +68,12 @@ function wm_single_poi($atts)
 	</section>
 
 	<div class="wm_body_section">
+		<?php if ($title) { ?>
+			<h1 class="align_left wm_header_title">
+				<?= $title ?>
+			</h1>
+		<?php } ?>
 		<div class="wm_container">
-			<?php if ($title) { ?>
-				<h1 class="align_left wm_header_title">
-					<?= $title ?>
-				</h1>
-			<?php } ?>
 			<div class="wm_left_wrapper">
 				<iframe class="wm_iframe_map" src="<?= esc_url($iframeUrl); ?>" loading="lazy"></iframe>
 				<?php if ($description) { ?>
