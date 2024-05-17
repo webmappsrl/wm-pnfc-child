@@ -143,7 +143,7 @@ div.wm_home_text > div > p > a:hover {
   border: 2px solid var(--color-header-top-text);
 }
 .wm_track_body_download {
-  width: 30%;
+  width: 50%;
   margin-bottom: 20px;
   font-size: 15px;
 }
