@@ -31,6 +31,29 @@ function child_theme_enqueue_swiper()
 }
 add_action('wp_enqueue_scripts', 'child_theme_enqueue_swiper');
 
+// Lightbox2 CSS and JS from CDN
+function child_theme_enqueue_lightbox2_cdn()
+{
+    wp_enqueue_style('lightbox2-css', 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css');
+    wp_enqueue_script('lightbox2-js', 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js', array('jquery'), '', true);
+    add_action('wp_footer', 'configure_lightbox2');
+}
+add_action('wp_enqueue_scripts', 'child_theme_enqueue_lightbox2_cdn');
+
+// Configuration Lightbox2
+function configure_lightbox2()
+{
+?>
+    <script>
+        lightbox.option({
+            'fadeDuration': 50,
+            'resizeDuration': 50,
+            'wrapAround': true
+        });
+    </script>
+<?php
+}
+
 //Font awesome
 function load_font_awesome()
 {

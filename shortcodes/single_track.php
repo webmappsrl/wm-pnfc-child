@@ -71,16 +71,13 @@ function wm_single_track($atts)
 								<?php foreach ($gallery as $image) : ?>
 									<div class="swiper-slide">
 										<?php
-										$size_order = ['400x200', '1440x500', '335x250', '250x150'];
-										$img_url = '';
-										foreach ($size_order as $size) {
-											if (isset($image['sizes'][$size])) {
-												$img_url = esc_url($image['sizes'][$size]);
-												break;
-											}
-										}
-										if ($img_url) : ?>
-											<img src="<?= $img_url ?>" alt="" loading="lazy">
+										$thumbnail_url = isset($image['thumbnail']) ? esc_url($image['thumbnail']) : '';
+										$high_res_url = isset($image['url']) ? esc_url($image['url']) : $thumbnail_url;
+										$caption = isset($image['caption'][$language]) ? esc_attr($image['caption'][$language]) : '';
+										if ($thumbnail_url) : ?>
+											<a href="<?= $high_res_url ?>" data-lightbox="track-gallery" data-title="<?= $caption ?>">
+												<img src="<?= $thumbnail_url ?>" alt="<?= $caption ?>" loading="lazy">
+											</a>
 										<?php endif; ?>
 									</div>
 								<?php endforeach; ?>
