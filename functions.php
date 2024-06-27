@@ -79,7 +79,7 @@ function add_custom_menu_script()
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            var menuLink = document.querySelector('.menu-item-90 a');
+            var menuLink = document.querySelector('.menu-item-90 a, .menu-item-93 a');
 
             if (menuLink) {
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
