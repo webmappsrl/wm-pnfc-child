@@ -85,10 +85,10 @@ div.pnfc-footer-socials > div > a > i:hover {
 #menu-menu-ospitalita li a:hover {
   color: var(--color-header-middle-text-hover);
 }
-div.wm_home_text > div > p > a {
+.wm_home_text {
   color: white;
 }
-div.wm_home_text > div > p > a:hover {
+.wm_home_text:hover {
   color: var(--color-header-middle-text-hover);
 }
 
