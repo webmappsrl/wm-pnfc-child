@@ -71,3 +71,31 @@ function wm_custom_slugify($title)
     $slug = sanitize_title_with_dashes($title);
     return $slug;
 }
+
+// Add custom script to change menu link based on device
+function add_custom_menu_script()
+{
+?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            var menuLink = document.querySelector('.menu-item-90 a');
+
+            if (menuLink) {
+                if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                    // iOS
+                    menuLink.href = "https://apps.apple.com/it/app/pnfc-trekking-map/id1053420140";
+                } else if (/android/i.test(userAgent)) {
+                    // Android
+                    menuLink.href = "https://play.google.com/store/apps/details?id=it.net7.parcoforestecasentinesi";
+                } else {
+                    // Not mobile
+                    menuLink.href = "https://maps.parcoforestecasentinesi.it/#/map";
+                }
+                menuLink.target = "_blank";
+            }
+        });
+    </script>
+<?php
+}
+add_action('wp_footer', 'add_custom_menu_script');
