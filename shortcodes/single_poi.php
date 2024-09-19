@@ -12,7 +12,7 @@ function wm_single_poi($atts)
 	}
 
 	extract(shortcode_atts(array(
-		'poi_id' => null,
+		'poi_id' => '',
 	), $atts));
 
 	$single_poi_base_url = get_option('poi_url');

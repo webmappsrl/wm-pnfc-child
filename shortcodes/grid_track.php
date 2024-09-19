@@ -23,8 +23,8 @@ function wm_grid_track($atts)
 
     foreach ($layer_ids_array as $id) {
         if (empty($id)) continue;
-
-        $layer_url = "https://geohub.webmapp.it/api/app/webapp/49/layer/{$id}";
+        $app_id = get_option('app_configuration_id');
+        $layer_url = "https://geohub.webmapp.it/api/app/webapp/$app_id/layer/{$id}";
         $response = wp_remote_get($layer_url);
 
         if (is_wp_error($response)) continue;
