@@ -15,7 +15,7 @@ function wm_single_track($atts)
 	), $atts));
 
 	$single_track_base_url = get_option('track_url');
-	$geojson_url = $single_track_base_url . $track_id;
+	$geojson_url = $single_track_base_url . $track_id . ".json";
 
 	$track = json_decode(file_get_contents($geojson_url), true);
 	$track = $track['properties'];
