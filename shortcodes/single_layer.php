@@ -14,8 +14,8 @@ function wm_single_layer($atts)
         'layer' => '',
     ), $atts));
 
-    $app_id = get_option('app_configuration_id');
-    $layer_url = "https://geohub.webmapp.it/api/app/webapp/$app_id/layer/$layer";
+    $layer_api_base = get_option('layer_api');
+    $layer_url = "{$layer_api_base}{$layer}";
     $layer_data = json_decode(file_get_contents($layer_url), true);
 
     $featured_image_url = $layer_data['featureImage']['url'] ?? get_stylesheet_directory_uri() . '/assets/images/background.jpg';
@@ -49,9 +49,6 @@ function wm_single_layer($atts)
             <?php echo do_shortcode("[wm_grid_track layer_id='{$layer}']"); ?>
         </div>
     </div>
-
-
-
 <?php
     return ob_get_clean();
 }

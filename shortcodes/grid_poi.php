@@ -20,10 +20,10 @@ function wm_grid_poi($atts)
 
         $poi_data = [];
         $poi_type_ids_array = !empty($poi_type_ids) ? explode(',', $poi_type_ids) : (!empty($poi_type_id) ? [$poi_type_id] : []);
+        $poi_type_api_base = get_option('poi_type_api');
 
         foreach ($poi_type_ids_array as $id) {
-            $app_id = get_option('app_configuration_id');
-            $poi_url = "https://geohub.webmapp.it/api/app/webapp/$app_id/taxonomies/poi_type/$id";
+            $poi_url = "{$poi_type_api_base}{$id}";
             $response = wp_remote_get($poi_url);
 
             if (!is_wp_error($response)) {
