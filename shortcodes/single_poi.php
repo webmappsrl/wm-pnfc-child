@@ -3,6 +3,15 @@ if (!is_admin()) {
 	add_shortcode('wm_single_poi', 'wm_single_poi');
 }
 
+function getPoiById($pois, $desiredId){
+    foreach ($pois['features'] as $feature) {
+        if (isset($feature['properties']['id']) && $feature['properties']['id'] === $desiredId) {
+            return $feature;
+        }
+    }
+    return null;
+}
+
 function wm_single_poi($atts)
 {
 	if (defined('ICL_LANGUAGE_CODE')) {
@@ -15,16 +24,16 @@ function wm_single_poi($atts)
 		'poi_id' => '',
 	), $atts));
 
-	$single_poi_base_url = get_option('poi_url');
-	$geojson_url = $single_poi_base_url . $poi_id;
+	$base_url = get_option('poi_url');
 
-	$response = wp_remote_get($geojson_url);
+	$response = wp_remote_get($base_url);
 	if (is_wp_error($response)) {
 		return 'Failed to load POI data.';
 	}
+	$pois = json_decode($response["body"], true);
 
-	$poi_data = wp_remote_retrieve_body($response);
-	$poi = json_decode($poi_data, true);
+	$poi = getPoiById($pois, $poi_id);
+
 	if (!$poi || !isset($poi['properties'])) {
 		return 'Failed to load POI data.';
 	}
