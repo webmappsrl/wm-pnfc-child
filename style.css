@@ -104,6 +104,30 @@ div.pnfc-footer-socials > div > a > i:hover {
   flex-wrap: wrap;
   padding: 0px 30px;
 }
+.wm_activities {
+  display: flex;
+  align-items: center;
+  gap: 0.5%;
+  padding-bottom: 20px;
+  padding-left: 2%;
+}
+.wm_activity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wm_activity_icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wm_activity_name {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
 .wm_left_wrapper {
   width: 65%;
 }
