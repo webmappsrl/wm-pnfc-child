@@ -236,6 +236,15 @@ div.pnfc-footer-socials > div > a > i:hover {
   object-fit: cover;
 }
 
+/* w-slider pnf-hiking-gallery buttons */
+.pnfc-hiking-gallery .royalSlider .rsArrow,
+.pnfc-hiking-gallery .royalSlider .rsArrowLeft,
+.pnfc-hiking-gallery .royalSlider .rsArrowRight,
+.pnfc-hiking-gallery .rsFullscreenBtn,
+.pnfc-hiking-gallery .rsBullets .rsBullet span {
+  color: var(--color-header-middle-text-hover) !important;
+}
+
 @media (max-width: 950px) {
   .wm_left_wrapper,
   .wm_right_wrapper {
@@ -297,4 +306,46 @@ div.pnfc-footer-socials > div > a > i:hover {
 .wm_grid_track_name:hover,
 .wm_grid_poi_name:hover {
   color: var(--color-header-middle-text-hover);
+}
+
+/* Guide Contact Info Shortcode */
+.wm_guide_contact_info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.wm_guide_contact_item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  width: 100%;
+  border-bottom: 1px solid #e0e0e0;
+  box-sizing: border-box;
+}
+
+.wm_guide_contact_item:last-child {
+  border-bottom: none;
+}
+
+.wm_guide_contact_icon {
+  color: var(--color-header-top-text);
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.wm_guide_contact_text {
+  color: var(--color-header-top-text);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.wm_guide_contact_text a {
+  text-decoration: none;
 }
