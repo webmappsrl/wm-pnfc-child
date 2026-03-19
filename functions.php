@@ -70,6 +70,76 @@ function create_guide_post_type() {
 add_action('init', 'create_guide_post_type', 0);
 
 /**
+ * Register taxonomies for Hiking Guides (filterable)
+ */
+function register_guide_taxonomies() {
+    $taxonomies = array(
+        'guide_abilitazioni' => array(
+            'labels' => array(
+                'name'          => __('Abilitazioni', 'wm-pnfc-child'),
+                'singular_name' => __('Abilitazione', 'wm-pnfc-child'),
+                'search_items'  => __('Cerca Abilitazioni', 'wm-pnfc-child'),
+                'all_items'     => __('Tutte le Abilitazioni', 'wm-pnfc-child'),
+                'edit_item'     => __('Modifica Abilitazione', 'wm-pnfc-child'),
+                'update_item'   => __('Aggiorna Abilitazione', 'wm-pnfc-child'),
+                'add_new_item'  => __('Aggiungi Abilitazione', 'wm-pnfc-child'),
+                'new_item_name' => __('Nuova Abilitazione', 'wm-pnfc-child'),
+                'menu_name'     => __('Abilitazioni', 'wm-pnfc-child'),
+            ),
+            'hierarchical'      => true,
+            'public'            => true,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'show_in_rest'      => true,
+            'rewrite'           => array('slug' => 'guide-abilitazioni'),
+        ),
+        'guide_lingue' => array(
+            'labels' => array(
+                'name'          => __('Lingue parlate', 'wm-pnfc-child'),
+                'singular_name' => __('Lingua parlata', 'wm-pnfc-child'),
+                'search_items'  => __('Cerca Lingue', 'wm-pnfc-child'),
+                'all_items'     => __('Tutte le Lingue', 'wm-pnfc-child'),
+                'edit_item'     => __('Modifica Lingua', 'wm-pnfc-child'),
+                'update_item'   => __('Aggiorna Lingua', 'wm-pnfc-child'),
+                'add_new_item'  => __('Aggiungi Lingua', 'wm-pnfc-child'),
+                'new_item_name' => __('Nuova Lingua', 'wm-pnfc-child'),
+                'menu_name'     => __('Lingue parlate', 'wm-pnfc-child'),
+            ),
+            'hierarchical'      => true,
+            'public'            => true,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'show_in_rest'      => true,
+            'rewrite'           => array('slug' => 'guide-lingue'),
+        ),
+        'guide_area_operativa' => array(
+            'labels' => array(
+                'name'          => __('Aree operative', 'wm-pnfc-child'),
+                'singular_name' => __('Area operativa', 'wm-pnfc-child'),
+                'search_items'  => __('Cerca Aree', 'wm-pnfc-child'),
+                'all_items'     => __('Tutte le Aree operative', 'wm-pnfc-child'),
+                'edit_item'     => __('Modifica Area', 'wm-pnfc-child'),
+                'update_item'   => __('Aggiorna Area', 'wm-pnfc-child'),
+                'add_new_item'  => __('Aggiungi Area operativa', 'wm-pnfc-child'),
+                'new_item_name' => __('Nuova Area operativa', 'wm-pnfc-child'),
+                'menu_name'     => __('Aree operative', 'wm-pnfc-child'),
+            ),
+            'hierarchical'      => true,
+            'public'            => true,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'show_in_rest'      => true,
+            'rewrite'           => array('slug' => 'guide-area-operativa'),
+        ),
+    );
+
+    foreach ($taxonomies as $taxonomy => $args) {
+        register_taxonomy($taxonomy, 'guide', $args);
+    }
+}
+add_action('init', 'register_guide_taxonomies', 1);
+
+/**
  * Configure custom fields as translatable in WPML
  */
 function configure_guide_contact_fields_for_wpml() {
@@ -77,14 +147,11 @@ function configure_guide_contact_fields_for_wpml() {
         return;
     }
     
-    // List of fields to make translatable
+    // List of fields to make translatable (taxonomies are translated via WPML taxonomies)
     $fields = array(
         '_guide_telefono',
         '_guide_email',
-        '_guide_sito',
-        '_guide_abilitazioni',
-        '_guide_lingue',
-        '_guide_area_operativa'
+        '_guide_sito'
     );
     
     // Configure fields as translatable in WPML settings
@@ -109,10 +176,7 @@ function wpml_guide_contact_fields_translation_settings($settings, $field_name) 
     $fields_to_translate = array(
         '_guide_telefono',
         '_guide_email',
-        '_guide_sito',
-        '_guide_abilitazioni',
-        '_guide_lingue',
-        '_guide_area_operativa'
+        '_guide_sito'
     );
     
     if (in_array($field_name, $fields_to_translate)) {
@@ -147,9 +211,6 @@ function render_guide_contact_meta_box($post) {
     $telefono = get_post_meta($post->ID, '_guide_telefono', true);
     $email = get_post_meta($post->ID, '_guide_email', true);
     $sito = get_post_meta($post->ID, '_guide_sito', true);
-    $abilitazioni = get_post_meta($post->ID, '_guide_abilitazioni', true);
-    $lingue = get_post_meta($post->ID, '_guide_lingue', true);
-    $area_operativa = get_post_meta($post->ID, '_guide_area_operativa', true);
     ?>
     <table class="form-table">
         <tr>
@@ -164,19 +225,8 @@ function render_guide_contact_meta_box($post) {
             <th><label for="guide_sito"><?php _e('Url:', 'wm-pnfc-child'); ?></label></th>
             <td><input type="url" id="guide_sito" name="guide_sito" value="<?php echo esc_attr($sito); ?>" class="regular-text" placeholder="https://" /></td>
         </tr>
-        <tr>
-            <th><label for="guide_abilitazioni"><?php _e('Abilitazioni:', 'wm-pnfc-child'); ?></label></th>
-            <td><textarea id="guide_abilitazioni" name="guide_abilitazioni" rows="3" class="large-text"><?php echo esc_textarea($abilitazioni); ?></textarea></td>
-        </tr>
-        <tr>
-            <th><label for="guide_lingue"><?php _e('Lingue parlate:', 'wm-pnfc-child'); ?></label></th>
-            <td><input type="text" id="guide_lingue" name="guide_lingue" value="<?php echo esc_attr($lingue); ?>" class="regular-text" /></td>
-        </tr>
-        <tr>
-            <th><label for="guide_area_operativa"><?php _e('Area operativa:', 'wm-pnfc-child'); ?></label></th>
-            <td><textarea id="guide_area_operativa" name="guide_area_operativa" rows="3" class="large-text"><?php echo esc_textarea($area_operativa); ?></textarea></td>
-        </tr>
     </table>
+    <p class="description"><?php _e('Abilitazioni, Lingue parlate e Area operativa si gestiscono dalle rispettive tassonomie nella colonna laterale.', 'wm-pnfc-child'); ?></p>
     <script>
     jQuery(document).ready(function($) {
         // Move meta box after image gallery
@@ -221,14 +271,11 @@ function save_guide_contact_info($post_id) {
         return;
     }
     
-    // Save fields
+    // Save fields (taxonomies are saved by WordPress)
     $fields = array(
         'guide_telefono' => '_guide_telefono',
         'guide_email' => '_guide_email',
-        'guide_sito' => '_guide_sito',
-        'guide_abilitazioni' => '_guide_abilitazioni',
-        'guide_lingue' => '_guide_lingue',
-        'guide_area_operativa' => '_guide_area_operativa'
+        'guide_sito' => '_guide_sito'
     );
     
     foreach ($fields as $field_name => $meta_key) {
@@ -279,23 +326,24 @@ function guide_contatti_shortcode($atts) {
         $sito = get_post_meta($original_post_id, '_guide_sito', true);
     }
     
-    $abilitazioni = get_post_meta($post_id, '_guide_abilitazioni', true);
-    if (empty($abilitazioni) && $original_post_id != $post_id) {
-        $abilitazioni = get_post_meta($original_post_id, '_guide_abilitazioni', true);
-    }
+    // Get taxonomy terms (same display order as before)
+    $abilitazioni_terms = get_the_terms($post_id, 'guide_abilitazioni');
+    $abilitazioni = $abilitazioni_terms && !is_wp_error($abilitazioni_terms)
+        ? implode(', ', wp_list_pluck($abilitazioni_terms, 'name'))
+        : '';
     
-    $lingue = get_post_meta($post_id, '_guide_lingue', true);
-    if (empty($lingue) && $original_post_id != $post_id) {
-        $lingue = get_post_meta($original_post_id, '_guide_lingue', true);
-    }
+    $lingue_terms = get_the_terms($post_id, 'guide_lingue');
+    $lingue = $lingue_terms && !is_wp_error($lingue_terms)
+        ? implode(', ', wp_list_pluck($lingue_terms, 'name'))
+        : '';
     
-    $area_operativa = get_post_meta($post_id, '_guide_area_operativa', true);
-    if (empty($area_operativa) && $original_post_id != $post_id) {
-        $area_operativa = get_post_meta($original_post_id, '_guide_area_operativa', true);
-    }
+    $area_terms = get_the_terms($post_id, 'guide_area_operativa');
+    $area_operativa = $area_terms && !is_wp_error($area_terms)
+        ? implode(', ', wp_list_pluck($area_terms, 'name'))
+        : '';
     
     // Check if there are data to display
-    if (empty($telefono) && empty($email) && empty($sito) && 
+    if (empty($telefono) && empty($email) && empty($sito) &&
         empty($abilitazioni) && empty($lingue) && empty($area_operativa)) {
         return '';
     }
@@ -327,7 +375,7 @@ function guide_contatti_shortcode($atts) {
     if (!empty($abilitazioni)) {
         $output .= '<div class="wm_guide_contact_item">';
         $output .= '<span class="wm_guide_contact_icon fa fa-certificate"></span>';
-        $output .= '<span class="wm_guide_contact_text">' . nl2br(esc_html($abilitazioni)) . '</span>';
+        $output .= '<span class="wm_guide_contact_text">' . esc_html($abilitazioni) . '</span>';
         $output .= '</div>';
     }
     
@@ -341,7 +389,7 @@ function guide_contatti_shortcode($atts) {
     if (!empty($area_operativa)) {
         $output .= '<div class="wm_guide_contact_item">';
         $output .= '<span class="wm_guide_contact_icon fa fa-map-marker-alt"></span>';
-        $output .= '<span class="wm_guide_contact_text">' . nl2br(esc_html($area_operativa)) . '</span>';
+        $output .= '<span class="wm_guide_contact_text">' . esc_html($area_operativa) . '</span>';
         $output .= '</div>';
     }
     
