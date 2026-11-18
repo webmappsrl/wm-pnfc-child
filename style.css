@@ -311,44 +311,170 @@ div.pnfc-footer-socials > div > a > i:hover {
   }
 }
 
-/* Guide Contact Info Shortcode */
+/* Guide: card dei contatti [guide_contatti] (oc:8940)
+   Regole copiate da wm-package-default.css 2.0 (.wm_info_details*), che sulle pagine delle guide
+   non viene caricato; confinate a .wm_guide_contact_info per non toccare le pagine delle tracce. */
 .wm_guide_contact_info {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+.wm_guide_contact_info .wm_info_details {
+  width: 100%;
+  margin: 0;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  width: 100%;
+  overflow: hidden;
 }
-
-.wm_guide_contact_item {
+.wm_guide_contact_info .wm_info_details_title {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0;
+  padding: 20px 20px 15px 20px;
+  border-bottom: 1px solid #e2e2e2;
+  background-color: #f8f9fa;
+}
+.wm_guide_contact_info .wm_info_details_grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0;
+}
+.wm_guide_contact_info .wm_info_detail_item {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0;
-  width: 100%;
-  border-bottom: 1px solid #e0e0e0;
-  box-sizing: border-box;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #e2e2e2;
+  background: #fff;
 }
-
-.wm_guide_contact_item:last-child {
+.wm_guide_contact_info .wm_info_detail_item:last-child {
   border-bottom: none;
 }
-
-.wm_guide_contact_icon {
-  color: var(--color-header-top-text);
-  font-size: 18px;
-  line-height: 1;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
+.wm_guide_contact_info .wm_info_detail_label {
+  flex: 0 0 auto;
+  font-size: 0.7em;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
-
-.wm_guide_contact_text {
-  color: var(--color-header-top-text);
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.5;
-  flex: 1;
+.wm_guide_contact_info .wm_info_detail_label .fa {
+  margin-right: 6px;
+  font-size: 1.1em;
 }
-
-.wm_guide_contact_text a {
+.wm_guide_contact_info .wm_info_detail_value {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.7em;
+  color: #1a1a1a;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.wm_guide_contact_info .wm_info_detail_value a {
   text-decoration: none;
+}
+.wm_guide_contact_info .wm_info_detail_value a:hover,
+.wm_guide_contact_info .wm_info_detail_value a:focus {
+  text-decoration: underline;
+}
+
+/* Card «In breve» con il Riassunto, sopra la card «Contatti» */
+.wm_guide_contact_info .wm_info_details + .wm_info_details {
+  margin-top: 1.5rem;
+}
+.wm_guide_contact_info .wm_guide_excerpt {
+  padding: 12px 20px;
+  font-size: 0.85em;
+  line-height: 1.5;
+  color: #1a1a1a;
+}
+
+/* Social: un profilo per riga, icona e nome del profilo */
+.wm_guide_contact_info .wm_guide_social {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.wm_guide_contact_info .wm_guide_social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: var(--color-header-top-text);
+  text-decoration: none;
+}
+.wm_guide_contact_info .wm_guide_social a .fab {
+  flex: 0 0 auto;
+  font-size: 1.2em;
+}
+.wm_guide_contact_info .wm_guide_social a:hover,
+.wm_guide_contact_info .wm_guide_social a:focus-visible {
+  color: var(--color-header-middle-text-hover);
+}
+.wm_guide_contact_info .wm_guide_social_svg {
+  flex: 0 0 auto;
+  width: 1.1em;
+  height: 1.1em;
+}
+
+/* Guide: galleria con cornice fissa, come .wm_gallery delle tracce (oc:8940).
+   La royalSlider di Impreza dimensiona le foto con stili inline: fuori dal fullscreen la cornice
+   è fissa e la foto la riempie; in fullscreen restano le regole della royalSlider (foto intera). */
+.pnfc-hiking-gallery .royalSlider:not(.rsFullscreen) {
+  aspect-ratio: 20 / 21;
+  height: auto !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pnfc-hiking-gallery .royalSlider:not(.rsFullscreen) .rsOverflow,
+.pnfc-hiking-gallery .royalSlider:not(.rsFullscreen) .rsSlide {
+  height: 100% !important;
+}
+.pnfc-hiking-gallery .royalSlider:not(.rsFullscreen) .rsSlide img.rsImg {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  object-fit: cover;
+}
+
+/* Guide senza foto nella galleria: lo slider di Impreza mostrerebbe 3 immagini qualsiasi della
+   libreria media, quindi si nasconde; la card dei contatti sale al suo posto. */
+.wm-guide-no-gallery .pnfc-hiking-gallery {
+  display: none;
+}
+.wm-guide-no-gallery .wm_guide_contact_info {
+  margin-top: 0;
+}
+
+/* Pagina guida senza immagine in evidenza: nessuna immagine al posto della foto. Il placeholder
+   (l'icona del Parco) resta solo nelle card della griglia. */
+.single-guide .w-image:has(img.g-placeholder) {
+  display: none;
+}
+
+/* Frecce e pallini arancioni (#F39200) sopra le foto: su cielo e neve il contrasto scende a
+   1,2:1, sotto il 3:1 di WCAG 2.1 – 1.4.11. Un contorno scuro li separa dalla foto. */
+.pnfc-hiking-gallery .rsArrowIcn,
+.pnfc-hiking-gallery .rsBullet span {
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
+}
+
+/* Guide: card della griglia (layout Impreza 4201), come .wm_grid_track_item (oc:8940) */
+.w-grid-item.type-guide .w-grid-item-h {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.w-grid-item.type-guide .w-grid-item-h:hover,
+.w-grid-item.type-guide .w-grid-item-h:focus-within {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
